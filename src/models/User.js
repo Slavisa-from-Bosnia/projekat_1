@@ -1,7 +1,7 @@
-import mongoose from "mongoose"
-const {Shema}= mongoose
+import mongoose from "mongoose";
+const {Schema}= mongoose;
 
-const userShema=newShema({
+const userSchema = new Schema({
     name:{
         type:String,
         unique:true,
@@ -18,6 +18,6 @@ const userShema=newShema({
     },
 },
     {timestamps:true}
-)
+);
 
-export default mongoose.model("User", userShema)
+export default mongoose.model("User", userSchema)

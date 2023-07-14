@@ -1,4 +1,3 @@
-const { default: mongoose } = require("mongoose")
 
 import mongoose from "mongoose"
 

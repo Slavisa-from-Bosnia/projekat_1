@@ -1,7 +1,7 @@
-import mongoose from "mongoose"
-const {Shema}= mongoose
+import mongoose from "mongoose";
+const {Schema}= mongoose;
 
-const postShema=newShema({
+const postSchema = new Schema({
     title:{
         type:String,
         require:true,
@@ -24,6 +24,6 @@ const postShema=newShema({
     },
 },
     {timestamps:true}
-)
+);
 
-export default mongoose.model("Post", postShema)
+export default mongoose.model("Post", postSchema);
