@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { notFound } from "next/navigation";
 
 async function getData(id) {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+  const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
     cashe: "no-store",
   });
   if (!res.ok) {
@@ -13,6 +13,14 @@ async function getData(id) {
 
   return res.json();
 }
+
+export async function generateMetadata({params}) {
+  const post = await getData(params.id)
+  return{
+    title:post.title,
+    description:post.desc,
+  };
+};
 
 const BlogPost = async ({params}) => {
   const data = await getData(params.id)
@@ -27,25 +35,30 @@ const BlogPost = async ({params}) => {
         </p>
         <div className={styles.author}>
           <Image 
-          src="https://images.pexels.com/photos/16353919/pexels-photo-16353919/free-photo-of-fontanna-di-trevi-in-rome-italy.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+          src={data.img}
           alt=""
           width={40}
           height={40}
           className={styles.avatar}
           />
-          <span className={styles.username} >Hej pa to sam ja!</span>
+          <span className={styles.username} >{data.username}</span>
         </div>
       </div>
       <div className={styles.imgContainer}>
         <Image
-        src="https://images.pexels.com/photos/16353919/pexels-photo-16353919/free-photo-of-fontanna-di-trevi-in-rome-italy.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+        src={data.img}
         alt=""
         fill={true}
         className={styles.image}
         />
       </div>
+      <div className={styles.content}>
+        <p className={styles.text}>
+          {data.content}
+        </p>
+      </div>
     </div>
-  )
+  );;
 }
 
 export default BlogPost
