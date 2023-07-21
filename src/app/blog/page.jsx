@@ -7,7 +7,6 @@ async function getData() {
   const res = await fetch('http://localhost:3000/api/posts', {
     cashe: "no-store",
   });
-  console.log(res);
   if (!res.ok) {
     throw new Error('Faild to fetch data');
   }
