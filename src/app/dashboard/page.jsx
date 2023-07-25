@@ -33,17 +33,13 @@ const Dashboard = () => {
 
   const session = useSession()
 
-  console.log(session)
-
   const router = useRouter()
 
   const fetcher=(...args)=>fetch(...args).then(res=>res.json())
 
-  const{data,error,isLoading}=useSWR(`/api/posts?username=${session?.data?.user.name}`,
+  const{data, mutate, error, isLoading}=useSWR(`/api/posts?username=${session?.data?.user.name}`,
    fetcher
   )
-
-  console.log("46", data)
 
   if (session.status === "loading"){
     return <p>Loading...</p>
@@ -71,9 +67,23 @@ const Dashboard = () => {
           username: session.data.user.name,
         })
       })
+      mutate()
+      e.target.reset()
     } catch (err) {
         console.log(err)
     }
+  }
+
+  const handelDelete = async(id) =>{
+    try {
+      await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+      })
+      mutate()
+    } catch (err) {
+      console.log(err)
+    }
+        
   }
 
   if (session.status === "authenticated") {
@@ -85,10 +95,10 @@ const Dashboard = () => {
           : data?.map((post) => (
             <div className={styles.post} key={post._id}>
               <div className={styles.imgContainer}>
-                <Image src={post.img} alt="" />
+                <Image src={post.img} alt="" width={200}  height={100} />
               </div>
             <h2 className={styles.postTitle}>{post.title}</h2>
-            <span className={styles.delete}>X</span>
+            <span className={styles.delete} onClick={() => handelDelete(post._id)}>X</span>
           </div>
           ))}
         </div>
@@ -103,6 +113,7 @@ const Dashboard = () => {
             cols="30"
             rows="10"
           ></textarea>
+          <button className={styles.button}>Send</button>
         </form>
       </div>
     )
